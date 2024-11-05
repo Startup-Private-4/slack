@@ -125,6 +125,64 @@ func (api *Client) teamProfileRequest(ctx context.Context, client httpClient, pa
 	return response, response.Err()
 }
 
+func (api *Client) GetExternalTeams(params *GetExternalTeamsParameters) (organizations []*Organization, nextCursor string, err error) {
+	return api.GetExternalTeamsContext(context.Background(), params)
+}
+
+type GetExternalTeamsParameters struct {
+	ConnectionStatusFilter string
+	Cursor                 string
+	Limit                  int
+	SlackConnectPrefFilter []string
+	SortDirection          string
+	SortField              string
+	WorkspaceFilter        []string
+}
+
+func (api *Client) GetExternalTeamsContext(ctx context.Context, params *GetExternalTeamsParameters) (organizations []*Organization, nextCursor string, err error) {
+	values := url.Values{
+		"token": {api.token},
+	}
+
+	if params != nil {
+		if params.ConnectionStatusFilter != "" {
+			values.Add("connection_status_filter", params.ConnectionStatusFilter)
+		}
+		if params.Cursor != "" {
+			values.Add("cursor", params.Cursor)
+		}
+		if params.Limit != 0 {
+			values.Add("limit", strconv.Itoa(params.Limit))
+		}
+		if len(params.SlackConnectPrefFilter) > 0 {
+			values.Add("slack_connect_pref_filter", params.SlackConnectPrefFilter[0])
+		}
+		if params.SortDirection != "" {
+			values.Add("sort_direction", params.SortDirection)
+		}
+		if params.SortField != "" {
+			values.Add("sort_field", params.SortField)
+		}
+		if len(params.WorkspaceFilter) > 0 {
+			values.Add("workspace_filter", params.WorkspaceFilter[0])
+		}
+	}
+
+	response := struct {
+		Organizations    []*Organization  `json:"organizations"`
+		ResponseMetaData responseMetaData `json:"response_metadata"`
+		SlackResponse
+	}{}
+
+	err = api.postMethod(ctx, "team.externalTeams.list", values, response)
+	if err != nil {
+		return nil, "", err
+	}
+
+	return response.Organizations, response.ResponseMetadata.Cursor, response.Err()
+
+}
+
 // GetTeamInfo gets the Team Information of the user
 func (api *Client) GetTeamInfo() (*TeamInfo, error) {
 	return api.GetTeamInfoContext(context.Background())
