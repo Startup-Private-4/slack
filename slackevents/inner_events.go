@@ -100,14 +100,6 @@ type ChannelIDChangedEvent struct {
 	EventTimestamp string `json:"event_ts"`
 }
 
-// ChannelSharedEvent represents the Channel shared event
-type ChannelSharedEvent struct {
-	Type            string `json:"type"`
-	Channel         string `json:"channel"`
-	EventTimestamp  string `json:"event_ts"`
-	ConnectedTeamID string `json:"connected_team_id"`
-}
-
 // ChannelCreatedInfo represents the information associated with the Channel created event
 type ChannelCreatedInfo struct {
 	ID        string `json:"id"`
@@ -673,8 +665,6 @@ const (
 	AppHomeOpened = EventsAPIType("app_home_opened")
 	// AppUninstalled Your Slack app was uninstalled.
 	AppUninstalled = EventsAPIType("app_uninstalled")
-	// ChannelShared is sent when a channel is shared.
-	ChannelShared = EventsAPIType("channel_shared")
 	// ChannelCreated is sent when a new channel is created.
 	ChannelCreated = EventsAPIType("channel_created")
 	// ChannelDeleted is sent when a channel is deleted.
