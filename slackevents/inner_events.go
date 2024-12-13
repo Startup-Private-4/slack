@@ -558,14 +558,6 @@ type TeamAccessRevokedEvent struct {
 	TeamIDs []string `json:"team_ids"`
 }
 
-// TeamDomainChangeEvent is sent if a team's domain has changed.
-type TeamDomainChangeEvent struct {
-	Type   string `json:"type"`
-	URL    string `json:"url"`
-	Domain string `json:"domain"`
-	TeamID string `json:"team_id"`
-}
-
 // UserProfileChangedEvent is sent if access to teams was revoked for your org-wide app.
 type UserProfileChangedEvent struct {
 	User    *slack.User `json:"user"`
@@ -764,8 +756,6 @@ const (
 	TeamAccessGranted = EventsAPIType("team_access_granted")
 	// TeamAccessRevoked is sent if access to teams was revoked for your org-wide app.
 	TeamAccessRevoked = EventsAPIType("team_access_revoked")
-	// TeamDomainChanged is sent if a team's domain has changed.
-	TeamDomainChange = EventsAPIType("team_domain_change")
 	// UserProfileChanged is sent if a user's profile information has changed.
 	UserProfileChanged = EventsAPIType("user_profile_changed")
 )
@@ -817,6 +807,5 @@ var EventsAPIInnerEventMapping = map[EventsAPIType]interface{}{
 	MessageMetadataDeleted:      MessageMetadataDeletedEvent{},
 	TeamAccessGranted:           TeamAccessGrantedEvent{},
 	TeamAccessRevoked:           TeamAccessRevokedEvent{},
-	TeamDomainChange:            TeamDomainChangeEvent{},
 	UserProfileChanged:          UserProfileChangedEvent{},
 }
